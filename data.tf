@@ -2,7 +2,7 @@
 data "archive_file" "source" {
     type = "zip"
     source_dir = "${path.module}/lambda"
-    output_path = "${path.module}/lambda/nlb-target.zip"
+    output_path = "${path.module}/${local.lambda_file_name}"
 }
 
 # Bucket lookup
