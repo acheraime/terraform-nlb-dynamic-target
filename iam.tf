@@ -30,15 +30,23 @@ data "aws_iam_policy_document" "extra" {
     statement {
         sid = "AllowCreateNetIfaces"
         actions = [
-            "elasticloadbalancing:RegisterTargets",
-            "elasticloadbalancing:DeregisterTargets",
-            "elasticloadbalancing:DescribeTargetHealth",
             "ec2:CreateNetworkInterface",
             "ec2:DescribeNetworkInterfaces",
             "ec2:DeleteNetworkInterface"
         ]
         effect = "Allow"
-        resources = ["*"] #TODO: Too permissive, add only arns of target load  balancer
+        resources = ["*"]
+    }
+
+    statement {
+        sid = "AllowLBActions"
+        actions = [
+            "elasticloadbalancing:RegisterTargets",
+            "elasticloadbalancing:DeregisterTargets",
+            "elasticloadbalancing:DescribeTargetHealth"
+        ]
+        effect = "Allow"
+        resources =["*"] #TODO: Too permissive, add only arns of target load  balancer
     }
 
     statement {
