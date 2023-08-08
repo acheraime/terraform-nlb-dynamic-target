@@ -20,6 +20,7 @@ module "rds" {
     create_db_subnet_group = false
     db_subnet_group_name = aws_db_subnet_group.example.name
     subnet_ids = [aws_subnet.a.id, aws_subnet.b.id]
+    vpc_security_group_ids = [aws_security_group.example.id]
 
     depends_on = [aws_db_subnet_group.example]
 }
@@ -56,5 +57,6 @@ resource "aws_lb_target_group" "example" {
 
 resource "aws_lb_target_group_attachment" "example" {
     target_group_arn = aws_lb_target_group.example.arn
+    availability_zone = module.rds.db_instance_availability_zone
     target_id = "192.168.1.67"
 }
