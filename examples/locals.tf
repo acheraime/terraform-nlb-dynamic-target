@@ -5,6 +5,6 @@ locals {
   port = "5432"
   instance_class = "db.t3.micro"
   instance_name = "example-postgres"
-  storage = 10
-  max_storage = 20
+  storage = 15
+  max_storage = 25
 }

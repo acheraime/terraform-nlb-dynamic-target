@@ -60,3 +60,8 @@ resource "aws_lb_target_group_attachment" "example" {
     availability_zone = module.rds.db_instance_availability_zone
     target_id = "192.168.1.67"
 }
+
+module "target" {
+    source = "../"
+    db_instance_ids = [module.rds.db_instance_identifier]
+}
