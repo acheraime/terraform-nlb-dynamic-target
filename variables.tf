@@ -9,3 +9,18 @@ variable "db_instance_ids" {
     description = "List of RDS instances ID"
 }
 
+variable "lb_target_group_arn" {
+    type = string
+    description = "ARN of the load balancer target group resource"
+}
+
+variable "rds_host_fqdn" {
+    type = string
+    description = "Fully qualified domain name of the RDS instance"
+}
+
+variable "lambda_log_level" {
+    type = string
+    description = "Log verbosity level of the lambda function"
+    default = "info"
+}

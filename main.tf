@@ -11,11 +11,19 @@ resource "aws_lambda_function" "this" {
 
     s3_bucket = data.aws_s3_bucket.bucket.id
     s3_key = local.lambda_file_name
-    runtime = "python3.11"
+    runtime = local.runtime
     handler = "main.handler"
     source_code_hash = data.archive_file.source.output_base64sha256
     role = aws_iam_role.this.arn
     publish = true
+
+    environment {
+        variables = {
+            LB_TARGET_GROUP_ARN = var.lb_target_group_arn
+            RDS_HOST_FQDN = var.rds_host_fqdn
+            LAMBDA_LOG_LEVEL = var.lambda_log_level
+        }
+    }
 
 }
 
