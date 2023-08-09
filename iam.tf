@@ -2,7 +2,7 @@
 # Role STS policy document
 data "aws_iam_policy_document" "this" {
     statement {
-        sid = "AllowAsume"
+        sid = "AllowAssume"
         actions = [
             "sts:AssumeRole"
         ]

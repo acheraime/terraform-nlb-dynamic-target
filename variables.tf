@@ -4,3 +4,8 @@ variable "bucket_name" {
     default = "zmn-lambda-dev"
 }
 
+variable "db_instance_ids" {
+    type = list(string)
+    description = "List of RDS instances ID"
+}
+
