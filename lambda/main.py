@@ -45,10 +45,18 @@ def handler(e, ctx):
         lb_target_group.set_targets(RDS_HOST_FQDN)
         logger.debug(f"Load balancer current targets: {lb_target_group.current_target_ids}")
         logger.debug(f"Load balancer possible new targets: {lb_target_group.new_target_ids}")
+
+        # Should we update the target group with
+        if lb_target_group.to_be_updated:
+            logger.debug("Target group needs to be updated with new targets")
+            if lb_target_group.register_targets():
+                logger.info(f"New targets registered to group {lb_target_group.new_target_ids}")
+        else:
+            logger.info("No new target to register")
     except ClientError as err:
         logger.error(err)
         sys.exit(1)
-        
+
     return {
         "environment": os.environ.get("AWS_REGION")
     }
