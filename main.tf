@@ -22,6 +22,8 @@ resource "aws_lambda_function" "this" {
             LB_TARGET_GROUP_ARN = var.lb_target_group_arn
             RDS_HOST_FQDN = var.rds_host_fqdn
             LAMBDA_LOG_LEVEL = var.lambda_log_level
+            MAX_RETRIES = var.max_retries
+            RETRY_INTERVAL_SECONDS = var.retry_interval_seconds
         }
     }
 

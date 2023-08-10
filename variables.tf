@@ -24,3 +24,15 @@ variable "lambda_log_level" {
     description = "Log verbosity level of the lambda function"
     default = "info"
 }
+
+variable "max_retries" {
+    type = number
+    description = "Maximum times to retry a failed remote call"
+    default = 3
+}
+
+variable "retry_interval_seconds" {
+    type = number
+    description = "Interval time in seconds to wait before retry a failed remote call"
+    default = 5
+}
