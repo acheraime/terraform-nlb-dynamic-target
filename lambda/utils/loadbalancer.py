@@ -5,6 +5,13 @@ from collections import Counter
 from dns.resolver import NXDOMAIN, NoNameservers
 from botocore.exceptions import ClientError
 from dataclasses import dataclass, field
+from typing import Any
+
+def targets() -> Any:
+    target_list = []
+
+
+    return target_list
 
 try:
     client = boto3.client('elbv2')
@@ -45,3 +52,39 @@ class LBTargetGroup:
         if Counter(self.current_target_ids) != Counter(self.new_target_ids):
             # The old targets are different then the new ones
             self.to_be_updated = True
+
+    def register_targets(self) -> bool:
+        """
+        register_targets unregister old targets from load balancer then registers new ones
+        """
+        if not self.to_be_updated:
+            return False
+        bad_target_ids = []
+        for id in self.current_target_ids:
+            bad_target_ids.append({
+                'Id': id
+            })
+        if self.current_target_ids:
+            try:
+                r = client.deregister_targets(
+                    TargetGroupArn=self.arn,
+                    Targets=bad_target_ids
+                )
+            except ClientError as err:
+                raise Exception(err.msg)
+        
+        # register new targets
+        new_target_ids = []
+        for nt in self.new_target_ids:
+            new_target_ids.append({
+                'Id': nt
+            })
+        try:
+            r = client.register_targets(
+                TargetGroupArn=self.arn,
+                Targets=new_target_ids
+            )
+        except ClientError as err:
+            raise Exception(err.msg)
+        
+        return True
