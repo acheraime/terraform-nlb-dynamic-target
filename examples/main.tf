@@ -55,11 +55,11 @@ resource "aws_lb_target_group" "example" {
     vpc_id = aws_vpc.example.id
 }
 
-resource "aws_lb_target_group_attachment" "example" {
-    target_group_arn = aws_lb_target_group.example.arn
-    availability_zone = module.rds.db_instance_availability_zone
-    target_id = "192.168.1.67"
-}
+#resource "aws_lb_target_group_attachment" "example" {
+#    target_group_arn = aws_lb_target_group.example.arn
+#    availability_zone = module.rds.db_instance_availability_zone
+#    target_id = "192.168.1.67"
+#}
 
 module "target" {
     source = "../"
