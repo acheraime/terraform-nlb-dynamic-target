@@ -14,6 +14,12 @@ variable "extra_rds_events" {
   default     = []
 }
 
+variable extra_function_policy {
+    type = string
+    description = "Additional policy document to add to the Lambda Function"
+    default = null
+}
+
 variable "lb_target_group_arn" {
   type        = string
   description = "ARN of the load balancer target group resource"
