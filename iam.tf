@@ -61,10 +61,10 @@ data "aws_iam_policy_document" "extra" {
   }
 }
 
-resource "aws_iam_policy_document" "func" {
+data "aws_iam_policy_document" "func" {
   source_policy_documents = var.extra_function_policy != null ? [
     data.aws_iam_policy_document.extra.json,
-    var.extra_funnction_policy
+    var.extra_function_policy
     ] : [
     data.aws_iam_policy_document.extra.json
   ]
