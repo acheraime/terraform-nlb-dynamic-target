@@ -1,3 +1,8 @@
+variable "function_name" {
+    type = string
+    description = "Name of the Lambda Function."
+    default = null
+}
 variable "db_instance_ids" {
     type = list(string)
     description = "List of RDS instances ID"
