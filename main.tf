@@ -1,16 +1,7 @@
-# Create S3 object from the archived code
-resource "aws_s3_object" "source" {
-    bucket = data.aws_s3_bucket.bucket.id
-    key = local.lambda_file_name
-    source = data.archive_file.source.output_path
-    etag = filemd5(data.archive_file.source.output_path)
-}
-
 resource "aws_lambda_function" "this" {
     function_name = local.function_name
 
-    s3_bucket = data.aws_s3_bucket.bucket.id
-    s3_key = local.lambda_file_name
+    filename = data.archive_file.source.output_path
     runtime = local.runtime
     handler = "main.handler"
     source_code_hash = data.archive_file.source.output_base64sha256
