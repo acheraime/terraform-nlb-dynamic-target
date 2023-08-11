@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "this" {
 
 # IAM role for the lambda function
 resource "aws_iam_role" "this" {
-    name = "nlb-target-role"
+    name = "${local.resource_prefix}-role"
     assume_role_policy = data.aws_iam_policy_document.this.json
 }
 
@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "extra" {
 }
 
 resource "aws_iam_policy" "extra" {
-    name = "nlb-target-update-policy"
+    name = "${local.resource_prefix}-policy"
     policy = data.aws_iam_policy_document.extra.json
 }
 
