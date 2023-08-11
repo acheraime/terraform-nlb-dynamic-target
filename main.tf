@@ -1,7 +1,8 @@
 resource "aws_lambda_function" "this" {
     function_name = local.function_name
-
+    description = "Lambda function to automate registration and deregistration of target in LB"
     filename = data.archive_file.source.output_path
+    package_type = "Zip"
     runtime = local.runtime
     handler = "main.handler"
     source_code_hash = data.archive_file.source.output_base64sha256
@@ -17,7 +18,6 @@ resource "aws_lambda_function" "this" {
             RETRY_INTERVAL_SECONDS = var.retry_interval_seconds
         }
     }
-
 }
 
 resource "aws_cloudwatch_log_group" "this" {
@@ -36,8 +36,10 @@ resource "aws_lambda_permission" "sns" {
     source_arn = aws_sns_topic.this.arn
 }
 
-# Invoque function
+# Invoke function
 data "aws_lambda_invocation" "this" {
+    count = local.implicit_invoke
+
     function_name = aws_lambda_function.this.function_name
     input = <<EOJSON
     {
