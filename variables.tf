@@ -29,7 +29,7 @@ variable "lambda_log_level" {
   description = "Log verbosity level of the lambda function"
   default     = "info"
   validation {
-    condition     = can(regex("[debug|info|warning|error|critical]", var.lambda_log_level))
+    condition     = can(regex("[debug|info|warning|error|critical]$", var.lambda_log_level))
     error_message = "Not a valid log level."
   }
 }
