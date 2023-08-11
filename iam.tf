@@ -62,12 +62,12 @@ data "aws_iam_policy_document" "extra" {
 }
 
 resource "aws_iam_policy_document" "func" {
-    source_policy_documents = var.extra_function_policy != null ? [
-       data.aws_iam_policy_document.extra.json,
-       var.extra_funnction_policy
+  source_policy_documents = var.extra_function_policy != null ? [
+    data.aws_iam_policy_document.extra.json,
+    var.extra_funnction_policy
     ] : [
-        data.aws_iam_policy_document.extra.json
-    ]
+    data.aws_iam_policy_document.extra.json
+  ]
 }
 resource "aws_iam_policy" "extra" {
   name   = "${local.resource_prefix}-policy"

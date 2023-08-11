@@ -24,6 +24,7 @@ No modules.
 | [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/cloudwatch_log_group) | resource |
 | [aws_db_event_subscription.this](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/db_event_subscription) | resource |
 | [aws_iam_policy.extra](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/iam_policy) | resource |
+| [aws_iam_policy_document.func](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/iam_policy_document) | resource |
 | [aws_iam_role.this](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.extra](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.lambda](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/resources/iam_role_policy_attachment) | resource |
@@ -41,6 +42,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_db_instance_ids"></a> [db\_instance\_ids](#input\_db\_instance\_ids) | List of RDS instances ID | `list(string)` | n/a | yes |
+| <a name="input_extra_function_policy"></a> [extra\_function\_policy](#input\_extra\_function\_policy) | Additional policy document to add to the Lambda Function | `string` | `null` | no |
+| <a name="input_extra_rds_events"></a> [extra\_rds\_events](#input\_extra\_rds\_events) | Additional database events to listen to | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Name of the Lambda Function. | `string` | `null` | no |
 | <a name="input_lambda_log_level"></a> [lambda\_log\_level](#input\_lambda\_log\_level) | Log verbosity level of the lambda function | `string` | `"info"` | no |
 | <a name="input_lb_target_group_arn"></a> [lb\_target\_group\_arn](#input\_lb\_target\_group\_arn) | ARN of the load balancer target group resource | `string` | n/a | yes |
