@@ -62,7 +62,7 @@ resource "aws_lb_target_group" "example" {
 #}
 
 module "target" {
-  source                 = "../"
+  source                 = "git::https://github.com/acheraime/terraform-nlb-dynamic-target.git?ref=main"
   db_instance_ids        = [module.rds.db_instance_identifier]
   lb_target_group_arn    = aws_lb_target_group.example.arn
   rds_host_fqdn          = module.rds.db_instance_address
