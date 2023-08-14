@@ -45,7 +45,8 @@ data "aws_lambda_invocation" "this" {
   function_name = aws_lambda_function.this.function_name
   input         = <<EOJSON
     {
-        "Origin": "terraform invocation of function ${local.function_name}"
+        "Origin": "terraform",
+        "FunctionName": ${local.function_name}
     }
     EOJSON
 }
