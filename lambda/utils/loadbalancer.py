@@ -6,7 +6,7 @@ from collections import Counter
 from dns.resolver import NXDOMAIN, NoNameservers
 from botocore.exceptions import ClientError
 from dataclasses import dataclass, field
-from typing import Any, List, Dict
+from typing import List, Dict
 
 from utils.retry import with_backoff_decorator
 
@@ -14,7 +14,7 @@ MaxRetries: int = int(os.environ.get('MAX_RETRIES', 5))
 RetyIntervalSeconds: int = int(os.environ.get('RETRY_INTERVAL_SECONDS', 5))
 
 
-def target_objects(target_ids: List[str]) -> List[Dict[str]]:
+def target_objects(target_ids: List[str]) -> List[Dict[str, str]]:
     target_list = []
     for id in target_ids:
         target_list.append({
