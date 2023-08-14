@@ -69,4 +69,6 @@ module "target" {
   lambda_log_level       = "debug"
   max_retries            = 5
   retry_interval_seconds = 6
+  slack_channel          = "nlb-target-updater"
+  slack_token            = "slack-token-here"
 }
