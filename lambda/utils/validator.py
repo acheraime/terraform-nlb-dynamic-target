@@ -5,7 +5,7 @@ from .error import MissingVariableError
 LB_TARGET_GROUP_ARN = None
 RDS_HOST_FQDN = None
 
-def set_variables():
+def validate_and_set_var():
 # Check that environment variables are  properly set
     try:
         LB_TARGET_GROUP_ARN = os.environ['LB_TARGET_GROUP_ARN']
@@ -17,6 +17,5 @@ def set_variables():
     except KeyError:
         raise MissingVariableError("RDS_HOST_FQDN")
     
-    LOG_LEVEL = os.environ.get('LAMBDA_LOG_LEVEL', 'info')
 
-    return LB_TARGET_GROUP_ARN, RDS_HOST_FQDN, LOG_LEVEL
+    return LB_TARGET_GROUP_ARN, RDS_HOST_FQDN
