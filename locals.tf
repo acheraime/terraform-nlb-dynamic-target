@@ -1,5 +1,5 @@
 locals {
-  resource_prefix  = var.resource_prefix != null ? var.resource_prefix : "${var.environment}-nlb-target"
+  resource_prefix  = var.resource_prefix != null ? var.resource_prefix : "nlb-target"
   function_name    = var.function_name != null ? var.function_name : "${local.resource_prefix}-updater"
   lambda_file_name = "${local.function_name}-source.zip"
   runtime          = "python3.11"
