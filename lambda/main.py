@@ -38,6 +38,7 @@ def handler(e, ctx):
     Lambda function entrypoint that handles the logic to
     update the loadbalancer target group target IPs as follow:
     1 - We ensure that this function has been invoked by a valid RDS event
+      or terraform
     2 - Then we verify the currently IPs that are attached to the LB
     3 - We resolve the rds hostname and compare the IP to the old ones
     4 - If the IPs are the same we stop here else we continue to the next step
@@ -67,8 +68,7 @@ def handler(e, ctx):
     except (KeyError, IndexError):
         # Chances are that this event is not from sns
         logger.warning(f"lambda function triggered by unknown source, received event: {json.dumps(e)}")
-        return response
-    
+        
     if fromSNS:
         # Get message attributes to check if it is from RDS
         message_attributes = events.get("Sns")["MessageAttributes"]
@@ -84,10 +84,22 @@ def handler(e, ctx):
             except SlackApiError as err:
                 logger.warning(f"fail to post message to slack: {err}")
 
-    if not isRDS:
-        logger.debug("SNS notification not from RDS")
-        return response
-        
+        if not isRDS:
+            logger.debug("SNS notification not from RDS")
+            return response
+
+    else:    
+        # Is it from terraform?
+        try:
+            if e["Orgin"] == "terraform" and e["FunctionName"] == ctx.function_name:
+                logger.debug("event received from Terraform")
+            else:
+                logger.debug("event not fired from terraform")
+                return response
+        except KeyError:
+            logger.debug("event not from terraform either")
+            return response
+
     # Instantiate a LBTargetGroup
     try:
         lb_target_group = LBTargetGroup(
