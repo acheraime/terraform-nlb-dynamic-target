@@ -79,10 +79,12 @@ No modules.
 | <a name="input_extra_function_policy"></a> [extra\_function\_policy](#input\_extra\_function\_policy) | Additional policy document to add to the Lambda Function | `string` | `null` | no |
 | <a name="input_extra_rds_events"></a> [extra\_rds\_events](#input\_extra\_rds\_events) | Additional database events to listen to | `list(string)` | `[]` | no |
 | <a name="input_function_name"></a> [function\_name](#input\_function\_name) | Name of the Lambda Function. | `string` | `null` | no |
+| <a name="input_invoke_from_terraform"></a> [invoke\_from\_terraform](#input\_invoke\_from\_terraform) | Whether to invoke the Lambda Function from terraform | `bool` | `true` | no |
 | <a name="input_lambda_log_level"></a> [lambda\_log\_level](#input\_lambda\_log\_level) | Log verbosity level of the lambda function | `string` | `"info"` | no |
 | <a name="input_lb_target_group_arn"></a> [lb\_target\_group\_arn](#input\_lb\_target\_group\_arn) | ARN of the load balancer target group resource | `string` | n/a | yes |
 | <a name="input_max_retries"></a> [max\_retries](#input\_max\_retries) | Maximum times to retry a failed remote call within the range [1-10] | `number` | `3` | no |
 | <a name="input_rds_host_fqdn"></a> [rds\_host\_fqdn](#input\_rds\_host\_fqdn) | Fully qualified domain name of the RDS instance | `string` | n/a | yes |
+| <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | Specifies the prefix to prepend to resources that will be created/updated | `string` | `null` | no |
 | <a name="input_retry_interval_seconds"></a> [retry\_interval\_seconds](#input\_retry\_interval\_seconds) | Interval time in seconds to wait before retry a failed remote call | `number` | `5` | no |
 | <a name="input_slack_channel"></a> [slack\_channel](#input\_slack\_channel) | Slack channel to publish notifications to | `string` | `""` | no |
 | <a name="input_slack_token"></a> [slack\_token](#input\_slack\_token) | Slack authentication token | `string` | `""` | no |
