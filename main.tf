@@ -16,6 +16,8 @@ resource "aws_lambda_function" "this" {
       LAMBDA_LOG_LEVEL       = var.lambda_log_level
       MAX_RETRIES            = var.max_retries
       RETRY_INTERVAL_SECONDS = var.retry_interval_seconds
+      SLACK_TOKEN = var.slack_token,
+      SLACK_CHANNEL = var.slack_channel
     }
   }
 }

@@ -63,3 +63,15 @@ variable "retry_interval_seconds" {
     error_message = "The retry interval in seconds must be between 5 and 1800."
   }
 }
+
+variable "slack_token" {
+    type = string
+    description = "Slack authentication token"
+    default = ""
+}
+
+variable "slack_channel" {
+    type = string
+    description = "Slack channel to publish notifications to"
+    default = ""
+}
