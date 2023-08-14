@@ -45,7 +45,6 @@ def handler(e, ctx):
     6 - Register the new IP to the target
     """
     # Prep work
-    event_json = json.dumps(e)
     logger.debug(f"LB_TARGET_GROUP_ARN: {LB_TARGET_GROUP_ARN}")
     logger.debug(f"RDS_HOST_FQDN: {RDS_HOST_FQDN}")
     
@@ -61,13 +60,13 @@ def handler(e, ctx):
     # Was this triggered by RDS?
     isRDS = False
     try:
-        events = event_json['Records'][0]
+        events = e['Records'][0]
         if events.get("EventSource") == "aws:sns":
             # This is from SNS
             fromSNS = True
-    except (KeyError, IndexError, TypeError):
+    except (KeyError, IndexError):
         # Chances are that this event is not from sns
-        logger.debug("lambda function triggered by unknown source")
+        logger.warning(f"lambda function triggered by unknown source, received event: {json.dumps(e)}")
         return response
     
     if fromSNS:
@@ -121,6 +120,4 @@ def handler(e, ctx):
             logger.warning(f"fail to post message to slack: {err}")
         sys.exit(1)
 
-    return {
-        "environment": os.environ.get("AWS_REGION")
-    }
+    return response
