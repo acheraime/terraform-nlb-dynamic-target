@@ -99,7 +99,7 @@ class LBTargetGroup:
                 TargetGroupArn=self.arn,
                 Targets=new_target_ids
             )
-            self.debug(f"registered {new_target_ids} to load balancer")
+            self.logger.debug(f"registered {new_target_ids} to load balancer")
         except ClientError as err:
             self.logger.error(f"fail to register new target(s) {new_target_ids} to LB: {err}")
             raise Exception(err)
