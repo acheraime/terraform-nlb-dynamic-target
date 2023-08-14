@@ -46,7 +46,7 @@ data "aws_lambda_invocation" "this" {
   input         = <<EOJSON
     {
         "Origin": "terraform",
-        "FunctionName": ${local.function_name}
+        "FunctionName": "${local.function_name}"
     }
     EOJSON
 }
