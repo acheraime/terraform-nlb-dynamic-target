@@ -91,7 +91,7 @@ def handler(e, ctx):
     else:    
         # Is it from terraform?
         try:
-            if e["Orgin"] == "terraform" and e["FunctionName"] == ctx.function_name:
+            if e["Origin"] == "terraform" and e["FunctionName"] == ctx.function_name:
                 logger.debug("event received from Terraform")
             else:
                 logger.debug("event not fired from terraform")
