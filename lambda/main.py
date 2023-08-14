@@ -4,7 +4,10 @@ import os
 import sys 
 
 from botocore.exceptions import ClientError
-from utils.validator import set_variables
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+
+from utils.validator import validate_and_set_var
 from utils.error import MissingVariableError
 from utils.loadbalancer import LBTargetGroup
 
@@ -12,13 +15,22 @@ from utils.loadbalancer import LBTargetGroup
 logger = logging.getLogger(name=__name__)
 
 try:
-    LB_TARGET_GROUP_ARN, RDS_HOST_FQDN, LOG_LEVEL = set_variables()
+    LB_TARGET_GROUP_ARN, RDS_HOST_FQDN = validate_and_set_var()
 except MissingVariableError as err:
     logger.error(err)
     sys.exit(1)
     
+LOG_LEVEL = os.environ.get('LAMBDA_LOG_LEVEL', 'info')
+SLACK_TOKEN = os.environ.get('SLACK_TOKEN')
+SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL')
 
 logger.setLevel(logging.getLevelName(LOG_LEVEL.upper()))
+
+SEND_SLACK = False
+if SLACK_TOKEN and SLACK_CHANNEL:
+    SEND_SLACK = True
+    # Instantiate slack client
+    slack_client = WebClient(SLACK_TOKEN)
 
 def handler(e, ctx):
     """
@@ -50,9 +62,17 @@ def handler(e, ctx):
         if lb_target_group.to_be_updated:
             logger.debug("Target group needs to be updated with new targets")
             if lb_target_group.register_targets():
-                logger.info(f"New targets registered to group {lb_target_group.new_target_ids}")
+                msg = f"New targets registered to group {lb_target_group.new_target_ids}"
+                logger.info()
+                # Send slack messsage
+                if SEND_SLACK:
+                    try:
+                        slack_client.chat_postMessage(channel=f"#{SLACK_CHANNEL}", text=msg)
+                    except SlackApiError as err:
+                        logger.warning(f"fail to post message to slack: {err}")
         else:
             logger.info("No new target to register")
+            slack_client.chat_postMessage(channel=f"#{SLACK_CHANNEL}", text="No new target to register")
     except ClientError as err:
         logger.error(err)
         sys.exit(1)
