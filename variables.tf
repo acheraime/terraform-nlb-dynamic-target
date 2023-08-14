@@ -65,13 +65,25 @@ variable "retry_interval_seconds" {
 }
 
 variable "slack_token" {
-    type = string
-    description = "Slack authentication token"
-    default = ""
+  type        = string
+  description = "Slack authentication token"
+  default     = ""
 }
 
 variable "slack_channel" {
-    type = string
-    description = "Slack channel to publish notifications to"
-    default = ""
+  type        = string
+  description = "Slack channel to publish notifications to"
+  default     = ""
+}
+
+variable "invoke_from_terraform" {
+  type        = bool
+  description = "Whether to invoke the Lambda Function from terraform"
+  default     = true
+}
+
+variable "resource_prefix" {
+  type        = string
+  description = "Specifies the prefix to prepend to resources that will be created/updated"
+  default     = null
 }
