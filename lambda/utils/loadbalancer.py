@@ -6,7 +6,7 @@ from collections import Counter
 from dns.resolver import NXDOMAIN, NoNameservers
 from botocore.exceptions import ClientError
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, List, Dict
 
 from utils.retry import with_backoff_decorator
 
@@ -14,9 +14,12 @@ MaxRetries: int = int(os.environ.get('MAX_RETRIES', 5))
 RetyIntervalSeconds: int = int(os.environ.get('RETRY_INTERVAL_SECONDS', 5))
 
 
-def targets() -> Any:
+def target_objects(target_ids: List[str]) -> List[Dict[str]]:
     target_list = []
-
+    for id in target_ids:
+        target_list.append({
+            'Id': id
+        })
 
     return target_list
 
@@ -69,11 +72,7 @@ class LBTargetGroup:
         """
         if not self.to_be_updated:
             return False
-        bad_target_ids = []
-        for id in self.current_target_ids:
-            bad_target_ids.append({
-                'Id': id
-            })
+        bad_target_ids = target_objects(self.current_target_ids)
         if self.current_target_ids:
             try:
                 r = client.deregister_targets(
@@ -84,11 +83,7 @@ class LBTargetGroup:
                 raise Exception(err)
         
         # register new targets
-        new_target_ids = []
-        for nt in self.new_target_ids:
-            new_target_ids.append({
-                'Id': nt
-            })
+        new_target_ids = target_objects(self.new_target_ids)
         try:
             r = client.register_targets(
                 TargetGroupArn=self.arn,
