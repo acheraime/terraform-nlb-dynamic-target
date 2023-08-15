@@ -8,6 +8,7 @@ resource "aws_lambda_function" "this" {
   source_code_hash = data.archive_file.source.output_base64sha256
   role             = aws_iam_role.this.arn
   publish          = true
+  timeout          = 60
 
   environment {
     variables = {
@@ -20,6 +21,11 @@ resource "aws_lambda_function" "this" {
       SLACK_CHANNEL          = var.slack_channel
     }
   }
+
+    vpc_config {
+        subnet_ids = var.subnet_ids
+        security_group_ids = var.security_group_ids
+    }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
