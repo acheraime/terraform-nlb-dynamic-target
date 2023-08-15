@@ -115,7 +115,7 @@ def handler(e, ctx):
             logger.debug("Target group needs to be updated with new targets")
             if lb_target_group.register_targets():
                 msg = f"New targets registered to group {lb_target_group.new_target_ids}"
-                logger.info()
+                logger.info(msg)
                 # Send slack messsage
                 if SEND_SLACK:
                     try:
