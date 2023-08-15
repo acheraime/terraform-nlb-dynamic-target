@@ -87,3 +87,15 @@ variable "resource_prefix" {
   description = "Specifies the prefix to prepend to resources that will be created/updated"
   default     = null
 }
+
+variable "subnet_ids" {
+  type        = list(string)
+  description = "List of subnet IDs"
+  default     = []
+}
+
+variable "security_group_ids" {
+  type        = list(string)
+  description = "List of security group IDs"
+  default     = []
+}
