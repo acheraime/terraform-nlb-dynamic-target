@@ -1,11 +1,13 @@
 import os
 import boto3
+import botocore
 import dns.resolver
 import logging
 
 from collections import Counter
 from dns.resolver import NXDOMAIN, NoNameservers
-from botocore.exceptions import ClientError
+from botocore.exceptions import (
+    ClientError, ConnectionError, ConnectTimeoutError, ReadTimeoutError)
 from dataclasses import dataclass, field
 from typing import List, Dict
 
@@ -24,8 +26,14 @@ def target_objects(target_ids: List[str]) -> List[Dict[str, str]]:
 
     return target_list
 
+config = botocore.config.Config(
+    read_timeout=30,
+    connect_timeout=30,
+    retries={"max_attempts": 0}
+)
+
 try:
-    client = boto3.client('elbv2')
+    client = boto3.client('elbv2',  config=config)
 except ClientError:
     raise ClientError
 
@@ -45,13 +53,14 @@ class LBTargetGroup:
         Inspect the target group to populate current_target_ids attribute
         """
         try:
+            self.logger.debug("initializing LBTargetGroup...")
             lbtg_attr = client.describe_target_health(TargetGroupArn=self.arn)
             for target in lbtg_attr['TargetHealthDescriptions']:
                 target_id = target['Target']['Id']
                 target_health = target['TargetHealth'].get('State')
                 self.current_target_ids.append(target_id)
                 self.logger.debug(f"target {target_id} is currently registered to the LB in a {target_health} state")
-        except ClientError as err:
+        except (ClientError, ConnectionError, ConnectTimeoutError, ReadTimeoutError) as err :
            self.logger.error(f"unable to instantiate the LBTargetGroup class: {err}")
            raise 
     
