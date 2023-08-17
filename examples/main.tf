@@ -71,4 +71,6 @@ module "target" {
   retry_interval_seconds = 6
   slack_channel          = "nlb-target-updater"
   slack_token            = "slack-token-here"
+  security_group_ids     = [aws_security_group.this.id]
+  subnet_ids             = [aws_subnet.a.id, aws_subnet.b.id]
 }
