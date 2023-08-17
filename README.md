@@ -2,24 +2,8 @@
 
 This module creates a lambda function that updates a Network Load Balancer with new IP of a RDS instance.
 The function is triggered by events emitted by RDS via SNS.
-
-## Example Usage
-```
-module "target" {
-  source                 = "git::https://github.com/acheraime/terraform-nlb-dynamic-target.git?ref=main"
-  db_instance_ids        = [module.rds.db_instance_identifier]
-  lb_target_group_arn    = aws_lb_target_group.example.arn
-  rds_host_fqdn          = module.rds.db_instance_address
-  lambda_log_level       = "debug"
-  max_retries            = 5
-  retry_interval_seconds = 6
-  slack_channel          = "nlb-target-updater"
-  slack_token            = "<slack_token_here>"
-}
-
-```
-
 ### Example of slack notification
+
 ```
 NLB Target Updater APP  9:04 AM
 event RDS-EVENT-0020 received from RDS instance arn:aws:rds:us-east-1:892274852933:db:example-postgres: {"Event Source":"db-instance","Event Time":"2023-08-14 13:04:12.874","Identifier Link":"https://console.aws.amazon.com/rds/home?region=us-east-1#dbinstance:id=example-postgres","Source ID":"example-postgres","Source ARN":"arn:aws:rds:us-east-1:892274852933:db:example-postgres","Event ID":"http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.Messages.html#RDS-EVENT-0020","Event Message":"Recovery of the DB instance has started. Recovery time will vary with the amount of data to be recovered.","Tags":{}}
@@ -39,18 +23,33 @@ event RDS-EVENT-0020 received from RDS instance arn:aws:rds:us-east-1:8922748529
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | 2.4.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | 5.11.0 |
+## Usage
+Basic usage of this module is as follows:
+```hcl
+module "example" {
+	 source  = "<module-path>"
 
-## Providers
+	 # Required variables
+	 db_instance_ids  = 
+	 lb_target_group_arn  = 
+	 rds_host_fqdn  = 
 
-| Name | Version |
-|------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.4.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.11.0 |
-
-## Modules
-
-No modules.
-
+	 # Optional variables
+	 extra_function_policy  = null
+	 extra_rds_events  = []
+	 function_name  = null
+	 invoke_from_terraform  = true
+	 lambda_log_level  = "info"
+	 log_retention_days  = 7
+	 max_retries  = 3
+	 resource_prefix  = null
+	 retry_interval_seconds  = 5
+	 security_group_ids  = []
+	 slack_channel  = ""
+	 slack_token  = ""
+	 subnet_ids  = []
+}
+```
 ## Resources
 
 | Name | Type |
@@ -70,7 +69,6 @@ No modules.
 | [aws_iam_policy_document.func](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.this](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/data-sources/iam_policy_document) | data source |
 | [aws_lambda_invocation.this](https://registry.terraform.io/providers/hashicorp/aws/5.11.0/docs/data-sources/lambda_invocation) | data source |
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -82,13 +80,15 @@ No modules.
 | <a name="input_invoke_from_terraform"></a> [invoke\_from\_terraform](#input\_invoke\_from\_terraform) | Whether to invoke the Lambda Function from terraform | `bool` | `true` | no |
 | <a name="input_lambda_log_level"></a> [lambda\_log\_level](#input\_lambda\_log\_level) | Log verbosity level of the lambda function | `string` | `"info"` | no |
 | <a name="input_lb_target_group_arn"></a> [lb\_target\_group\_arn](#input\_lb\_target\_group\_arn) | ARN of the load balancer target group resource | `string` | n/a | yes |
+| <a name="input_log_retention_days"></a> [log\_retention\_days](#input\_log\_retention\_days) | Specifies how many days to keep log | `number` | `7` | no |
 | <a name="input_max_retries"></a> [max\_retries](#input\_max\_retries) | Maximum times to retry a failed remote call within the range [1-10] | `number` | `3` | no |
 | <a name="input_rds_host_fqdn"></a> [rds\_host\_fqdn](#input\_rds\_host\_fqdn) | Fully qualified domain name of the RDS instance | `string` | n/a | yes |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | Specifies the prefix to prepend to resources that will be created/updated | `string` | `null` | no |
 | <a name="input_retry_interval_seconds"></a> [retry\_interval\_seconds](#input\_retry\_interval\_seconds) | Interval time in seconds to wait before retry a failed remote call | `number` | `5` | no |
+| <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group IDs for the Function. Required if subnet\_ids is set | `list(string)` | `[]` | no |
 | <a name="input_slack_channel"></a> [slack\_channel](#input\_slack\_channel) | Slack channel to publish notifications to | `string` | `""` | no |
 | <a name="input_slack_token"></a> [slack\_token](#input\_slack\_token) | Slack authentication token | `string` | `""` | no |
-
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | List of subnet IDs to place the Function in. Required if security\_groups is provided | `list(string)` | `[]` | no |
 ## Outputs
 
 | Name | Description |
