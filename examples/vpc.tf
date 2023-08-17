@@ -1,8 +1,8 @@
 # Create a test VPC
 resource "aws_vpc" "example" {
-  cidr_block = "192.168.0.0/16"
+  cidr_block           = "192.168.0.0/16"
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
 
   tags = {
     Name = "example-vpc"
@@ -20,9 +20,9 @@ resource "aws_subnet" "a" {
 }
 
 resource "aws_subnet" "b" {
-  vpc_id            = aws_vpc.example.id
-  cidr_block        = "192.168.2.0/24"
-  availability_zone = "us-east-1b"
+  vpc_id                  = aws_vpc.example.id
+  cidr_block              = "192.168.2.0/24"
+  availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
   tags = {
@@ -53,7 +53,7 @@ resource "aws_eip" "b" {
 
 resource "aws_nat_gateway" "bnat" {
   allocation_id = aws_eip.b.allocation_id
-  subnet_id = aws_subnet.b.id
+  subnet_id     = aws_subnet.b.id
 
   tags = {
     Name = "Nat gateway B"
@@ -79,11 +79,11 @@ resource "aws_route_table" "rtb" {
 }
 
 resource "aws_route_table_association" "arta" {
-  subnet_id = aws_subnet.a.id
+  subnet_id      = aws_subnet.a.id
   route_table_id = aws_route_table.rta.id
 }
 
 resource "aws_route_table_association" "brta" {
-  subnet_id = aws_subnet.b.id
+  subnet_id      = aws_subnet.b.id
   route_table_id = aws_route_table.rtb.id
 }
