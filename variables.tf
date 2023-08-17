@@ -90,12 +90,18 @@ variable "resource_prefix" {
 
 variable "subnet_ids" {
   type        = list(string)
-  description = "List of subnet IDs"
+  description = "List of subnet IDs to place the Function in. Required if security_groups is provided"
   default     = []
 }
 
 variable "security_group_ids" {
   type        = list(string)
-  description = "List of security group IDs"
+  description = "List of security group IDs for the Function. Required if subnet_ids is set"
   default     = []
+}
+
+variable "log_retention_days" {
+  type        = number
+  description = "Specifies how many days to keep log"
+  default     = 7
 }
