@@ -22,15 +22,15 @@ resource "aws_lambda_function" "this" {
     }
   }
 
-    vpc_config {
-        subnet_ids = var.subnet_ids
-        security_group_ids = var.security_group_ids
-    }
+  vpc_config {
+    subnet_ids         = var.subnet_ids
+    security_group_ids = var.security_group_ids
+  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/lambda/${aws_lambda_function.this.function_name}"
-  retention_in_days = 14
+  retention_in_days = var.log_retention_days
   skip_destroy      = false
 }
 
