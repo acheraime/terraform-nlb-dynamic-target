@@ -27,8 +27,8 @@ def target_objects(target_ids: List[str]) -> List[Dict[str, str]]:
     return target_list
 
 config = botocore.config.Config(
-    read_timeout=30,
-    connect_timeout=30,
+    read_timeout=260,
+    connect_timeout=260,
     retries={"max_attempts": 0}
 )
 
