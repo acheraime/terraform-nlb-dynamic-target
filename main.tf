@@ -8,7 +8,7 @@ resource "aws_lambda_function" "this" {
   source_code_hash = data.archive_file.source.output_base64sha256
   role             = aws_iam_role.this.arn
   publish          = true
-  timeout          = 60
+  timeout          = 300
 
   environment {
     variables = {
